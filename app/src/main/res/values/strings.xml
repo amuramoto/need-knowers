@@ -3,4 +3,10 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="spinner_title">Select a know needer</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_care_taker">CareTakerActivity</string>
+    <string name="title_activity_need_knower">NeedKnowerActivity</string>
+    <string name="title_activity_where_am_i">WhereAmIActivity</string>
+    <string name="title_activity_location_search">LocationSearchActivity</string>
+    <string name="title_activity_directions">DirectionsActivity</string>
 </resources>
