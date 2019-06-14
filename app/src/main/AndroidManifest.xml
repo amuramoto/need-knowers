@@ -16,28 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".DirectionsActivity"
-            android:label="@string/title_activity_directions"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".LocationSearchActivity"
-            android:label="@string/title_activity_location_search"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".WhereAmIActivity"
-            android:label="@string/title_activity_where_am_i"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".NeedKnowerActivity"
-            android:label="@string/title_activity_need_knower"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".CareTakerActivity"
-            android:label="@string/title_activity_care_taker"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

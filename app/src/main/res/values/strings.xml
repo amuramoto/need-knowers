@@ -9,4 +9,10 @@
     <string name="title_activity_where_am_i">WhereAmIActivity</string>
     <string name="title_activity_location_search">LocationSearchActivity</string>
     <string name="title_activity_directions">DirectionsActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login_fragment">LoginFragment</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
