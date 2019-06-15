@@ -9,10 +9,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -25,15 +24,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class CareTakerMainFragment extends Fragment
         implements OnMapReadyCallback {
+
+    GoogleMap mMap;
+
     // Include the OnCreate() method here too, as described above.
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-        LatLng singapore = new LatLng(1.352, 103.82);
-        googleMap.addMarker(new MarkerOptions().position(singapore)
-                .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(singapore));
+
+        mMap = googleMap;
     }
 
     private OnFragmentInteractionListener mListener;
@@ -51,10 +51,6 @@ public class CareTakerMainFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        GoogleMap mMap;
-
-
-
 
 
     }
@@ -72,6 +68,24 @@ public class CareTakerMainFragment extends Fragment
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+        final String need_knower = spinner.getSelectedItem().toString();
+
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                LatLng singapore = new LatLng(1.352, 103.82);
+                mMap.addMarker(new MarkerOptions().position(singapore)
+                        .title(need_knower));
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(singapore));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
