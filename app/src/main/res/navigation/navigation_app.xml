@@ -21,7 +21,17 @@
         android:id="@+id/directionListFragment"
         android:name="com.needknowers.community.DirectionListFragment"
         android:label="fragment_direction_list"
-        tools:layout="@layout/fragment_direction_list" />
+        tools:layout="@layout/fragment_direction_list" >
+        <argument
+            android:name="destLatLng"
+            app:argType="com.google.android.gms.maps.model.LatLng" />
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument android:name="currentLatLng"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            />
+    </fragment>
     <fragment
         android:id="@+id/careTakerMainFragment"
         android:name="com.needknowers.community.CareTakerMainFragment"
@@ -53,4 +63,5 @@
         android:name="com.needknowers.community.WhereAmIFragment"
         android:label="fragment_where_am_i"
         tools:layout="@layout/fragment_where_am_i" />
+    <fragment android:id="@+id/placeholder" />
 </navigation>

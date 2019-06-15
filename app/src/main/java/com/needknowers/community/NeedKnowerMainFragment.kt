@@ -31,9 +31,7 @@ class NeedKnowerMainFragment : Fragment() {
         val places = Places.createClient(context!!)
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity!!)
-        mFusedLocationProviderClient.lastLocation.addOnCompleteListener {
-            Log.d(TAG, it.result.toString())
-        }
+
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
