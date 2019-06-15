@@ -1,53 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NeedKnowerMainFragment">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="?android:attr/actionBarSize"/>
 
-        <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/btn_whereAmI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_weight="1"
+        >
+
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btn_getDirection"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Get Directions" />
-
-            <Button
-                android:id="@+id/btn_getDirectionSound"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="S" />
-        </LinearLayout>
-
-        <LinearLayout
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@color/quantum_black_100"
+            tools:srcCompat="@tools:sample/backgrounds/scenic[19]"
+            android:contentDescription="@string/where_am_i" />
+        <View
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55000000"
+            />
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            style="@style/TextAppearance.AppCompat.Large.Inverse"
+            android:text="@string/where_am_i"
+            />
+    </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/btn_whereAmI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Where Am I?" />
 
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="S" />
-        </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/btn_getDirection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_weight="1">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@color/quantum_black_100"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:contentDescription="@string/directions" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#55000000"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="@style/TextAppearance.AppCompat.Large.Inverse"
+            android:text="@string/directions"
+            />
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
