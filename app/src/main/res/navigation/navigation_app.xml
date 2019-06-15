@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_app"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.needknowers.community.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_careTakerMainFragment"
+            app:destination="@id/careTakerMainFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_needKnowerMainFragment"
+            app:destination="@id/needKnowerMainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/directionListFragment"
+        android:name="com.needknowers.community.DirectionListFragment"
+        android:label="fragment_direction_list"
+        tools:layout="@layout/fragment_direction_list" />
+    <fragment
+        android:id="@+id/careTakerMainFragment"
+        android:name="com.needknowers.community.CareTakerMainFragment"
+        android:label="fragment_care_taker_main"
+        tools:layout="@layout/fragment_care_taker_main" />
+    <fragment
+        android:id="@+id/searchLocationFragment"
+        android:name="com.needknowers.community.SearchLocationFragment"
+        android:label="fragment_search_location"
+        tools:layout="@layout/fragment_search_location" >
+        <action
+            android:id="@+id/action_searchLocationFragment_to_directionListFragment"
+            app:destination="@id/directionListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/needKnowerMainFragment"
+        android:name="com.needknowers.community.NeedKnowerMainFragment"
+        android:label="fragment_need_knower_main"
+        tools:layout="@layout/fragment_need_knower_main" >
+        <action
+            android:id="@+id/action_needKnowerMainFragment_to_whereAmIFragment2"
+            app:destination="@id/whereAmIFragment2" />
+        <action
+            android:id="@+id/action_needKnowerMainFragment_to_searchLocationFragment"
+            app:destination="@id/searchLocationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/whereAmIFragment2"
+        android:name="com.needknowers.community.WhereAmIFragment"
+        android:label="fragment_where_am_i"
+        tools:layout="@layout/fragment_where_am_i" />
+</navigation>
