@@ -17,4 +17,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="directions">Directions</string>
     <string name="where_am_i">Where Am I?</string>
+    <string-array name="persons_array">
+        <item>Dawson</item>
+        <item>Kenneth</item>
+        <item>Natasha</item>
+        <item>Wei Kang</item>
+        <item>John</item>
+    </string-array>
 </resources>
