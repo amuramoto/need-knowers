@@ -6,13 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 
 
-const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1000
+const val PERMISSIONS_REQUEST_NEED_KNOWERS = 1000
 
 class LoginFragment : Fragment() {
     private var nextScreenCallback: (() -> Unit)? = null
@@ -55,20 +54,23 @@ class LoginFragment : Fragment() {
      * onRequestPermissionsResult.
      */
         if (ContextCompat.checkSelfPermission(activity!!,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(activity!!,
+                        android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             nextScreenCallback?.invoke()
         } else {
-            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
+            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.CALL_PHONE),
+                    PERMISSIONS_REQUEST_NEED_KNOWERS)
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+            PERMISSIONS_REQUEST_NEED_KNOWERS -> {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     nextScreenCallback?.invoke()
                 }
             }
