@@ -59,8 +59,7 @@ class LoginFragment : Fragment() {
                         android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             nextScreenCallback?.invoke()
         } else {
-            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.CALL_PHONE),
-                    PERMISSIONS_REQUEST_NEED_KNOWERS)
+            requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.CALL_PHONE), PERMISSIONS_REQUEST_NEED_KNOWERS)
         }
     }
 
@@ -69,8 +68,7 @@ class LoginFragment : Fragment() {
         when (requestCode) {
             PERMISSIONS_REQUEST_NEED_KNOWERS -> {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                     nextScreenCallback?.invoke()
                 }
             }

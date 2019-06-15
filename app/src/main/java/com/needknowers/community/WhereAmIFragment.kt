@@ -20,6 +20,10 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import kotlinx.android.synthetic.main.fragment_where_am_i.view.*
+import java.util.*
+import java.util.Arrays.asList
+
+
 
 
 class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
