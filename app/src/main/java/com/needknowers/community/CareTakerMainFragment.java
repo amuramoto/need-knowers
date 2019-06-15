@@ -30,10 +30,10 @@ public class CareTakerMainFragment extends Fragment
     public void onMapReady(GoogleMap googleMap) {
         // Add a marker in Sydney, Australia,
         // and move the map's camera to the same location.
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions().position(sydney)
+        LatLng singapore = new LatLng(1.352, 103.82);
+        googleMap.addMarker(new MarkerOptions().position(singapore)
                 .title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(singapore));
     }
 
     private OnFragmentInteractionListener mListener;
