@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,22 +9,76 @@
     android:orientation="vertical"
     >
 
-
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/where_am_i" />
+        android:text="@string/where_am_i"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/streetviewpanorama" />
+
     <com.google.android.gms.maps.StreetViewPanoramaView
         android:id="@+id/streetviewpanorama"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        />
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardd"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintBottom_toTopOf="@id/card"
         />
 
-</LinearLayout>
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/streetviewpanorama"
+        tools:layout_editor_absoluteX="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                tools:text="Google Singapore" />
+
+            <TextView
+                android:id="@+id/tv_address"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                tools:text="402, Blk X, Tiong Bahru, Singapore" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/call_home"
+        android:layout_margin="32dp"
+        android:tint="@color/quantum_white_100"
+        android:src="@drawable/ic_local_phone_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="18dp"
+        android:layout_marginEnd="16dp"
+        android:text="Call Help"
+        app:layout_constraintBottom_toBottomOf="@+id/call_home"
+        app:layout_constraintEnd_toStartOf="@+id/call_home"
+        app:layout_constraintTop_toTopOf="@+id/call_home" />
+</androidx.constraintlayout.widget.ConstraintLayout>
