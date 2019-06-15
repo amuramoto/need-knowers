@@ -23,9 +23,6 @@ import kotlinx.android.synthetic.main.fragment_where_am_i.view.*
 import java.util.*
 import java.util.Arrays.asList
 
-
-
-
 class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
 
     private lateinit var places: PlacesClient
@@ -122,6 +119,4 @@ class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
         panorama.isStreetNamesEnabled = true
         panorama.setPosition(LatLng(latitude!!, longitude!!))
     }
-
-
 }

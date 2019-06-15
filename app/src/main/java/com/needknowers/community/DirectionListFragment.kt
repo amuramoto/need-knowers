@@ -3,6 +3,7 @@ package com.needknowers.community
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 
 import androidx.fragment.app.Fragment
 
@@ -10,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.location.FusedLocationProviderClient
 
 
 /**
@@ -24,6 +26,8 @@ class DirectionListFragment : Fragment() {
 
     val args: DirectionListFragmentArgs by navArgs()
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -36,5 +40,6 @@ class DirectionListFragment : Fragment() {
 
         return view
     }
+
 
 }// Required empty public constructor
