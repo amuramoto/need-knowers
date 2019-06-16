@@ -59,6 +59,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         }
     }
 
+    private var hasArrived: Boolean = false
     private lateinit var tts: TextToSpeech
     private var isDirectionDetected: Boolean = false
     private var initialDirection: String? = null
@@ -75,7 +76,6 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
 
     val args: DirectionListFragmentArgs by navArgs()
     val service = AppService.INSTANCE.service
-    var currentStepIndex = 0
     var currentBigStepIndex = 0
     lateinit var mFusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var places: PlacesClient
@@ -166,26 +166,38 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
     }
 
     fun speakDirection() {
+        if (overallBigSteps.size <= currentBigStepIndex) {
+            return
+        }
         val currentBigStep = overallBigSteps[currentBigStepIndex]
         if (currentBigStep.travelMode == "TRANSIT") {
-            tts.speak(currentBigStep.htmlInstructions, TextToSpeech.QUEUE_ADD, null, null)
-        } else if (currentBigStepIndex < overallBigSteps.size && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
+            tts.speak("Take the " + currentBigStep.htmlInstructions, TextToSpeech.QUEUE_ADD, null, null)
+        } else if (currentBigStepIndex < overallBigSteps.size - 1 && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
             tts.speak("Go take the " + overallBigSteps[currentBigStepIndex + 1].htmlInstructions, TextToSpeech.QUEUE_ADD, null, null)
+        }
+        if (currentBigStepIndex == overallBigSteps.size - 1){
+            tts.speak("You are almost there. Walk to ${args.placeName}", TextToSpeech.QUEUE_ADD, null, null)
         }
     }
 
     fun transitDirection() {
+        if (overallBigSteps.size <= currentBigStepIndex) {
+            return
+        }
         val currentBigStep = overallBigSteps[currentBigStepIndex]
         if (currentBigStep.travelMode == "TRANSIT") {
-            currentArrivalTransitStop = overallBigSteps[currentBigStepIndex + 1].transitDetails?.arrivalStop
+            currentArrivalTransitStop = overallBigSteps[currentBigStepIndex].transitDetails?.arrivalStop
         }
-        if (currentBigStepIndex < overallBigSteps.size && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
+        if (overallBigSteps.size > 1 && currentBigStepIndex < overallBigSteps.size - 1 && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
             upcomingDepartureTransitStop = overallBigSteps[currentBigStepIndex + 1].transitDetails?.departureStop
         }
     }
 
     fun notifyStep() {
-        val currentStep = overallBigSteps[currentStepIndex]
+        if (overallBigSteps.size <= currentBigStepIndex) {
+            return
+        }
+        val currentStep = overallBigSteps[currentBigStepIndex]
         Log.d("currentStep", currentStep.toString())
 
         if (currentStep.travelMode == "TRANSIT") {
@@ -194,24 +206,24 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
             currentDestLongitude = currentArrivalTransitStop?.location?.long
                     ?: throw Exception("currentDestLongitudeNotSet")
             tv_current_direction.text = Html.fromHtml(currentStep.htmlInstructions, Html.FROM_HTML_MODE_COMPACT)
-        } else if (currentBigStepIndex < overallBigSteps.size && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
+        } else if (overallBigSteps.size > 1 && currentBigStepIndex < overallBigSteps.size - 1 && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
             currentDestLatitude = upcomingDepartureTransitStop?.location?.lat
                     ?: throw Exception("upcomingDestLatitudeNotSet")
             currentDestLongitude = upcomingDepartureTransitStop?.location?.long
                     ?: throw Exception("upcomingDestLongitudeNotSet")
-            tv_current_direction.text = Html.fromHtml("Go take the " + currentStep.htmlInstructions, Html.FROM_HTML_MODE_COMPACT)
+            tv_current_direction.text = Html.fromHtml("Go take the " + overallBigSteps[currentBigStepIndex + 1].htmlInstructions, Html.FROM_HTML_MODE_COMPACT)
         } else {
             currentDestLatitude = currentStep.endLocation.lat
             currentDestLongitude = currentStep.endLocation.long
-            tv_current_direction.text = Html.fromHtml(currentStep.htmlInstructions, Html.FROM_HTML_MODE_COMPACT)
+            tv_current_direction.text = "You are almost there. Walk to ${args.placeName}"
         }
 
         mPanorama?.isUserNavigationEnabled = false
         mPanorama?.isStreetNamesEnabled = true
         Log.d("dest", "lat $currentDestLatitude long $currentDestLongitude")
         mPanorama?.setPosition(LatLng(currentDestLatitude, currentDestLongitude))
-        if (currentStepIndex + 1 < overallSteps.size) {
-            val nextStep = overallSteps[currentStepIndex + 1]
+        if (currentBigStepIndex + 1 < overallBigSteps.size) {
+            val nextStep = overallBigSteps[currentBigStepIndex + 1]
             tv_next_direction.text = Html.fromHtml(nextStep.htmlInstructions, Html.FROM_HTML_MODE_COMPACT)
         }
     }
@@ -237,28 +249,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
     var mGravity: FloatArray? = null
     var mGeomagnetic: FloatArray? = null
     override fun onSensorChanged(event: SensorEvent) {
-        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER)
-            mGravity = event.values
-        if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD)
-            mGeomagnetic = event.values
-        if (mGravity != null && mGeomagnetic != null) {
-            val R = FloatArray(9)
-            val I = FloatArray(9)
-            val success = SensorManager.getRotationMatrix(R, I, mGravity, mGeomagnetic)
-            if (success) {
-                val orientation = FloatArray(3)
-                SensorManager.getOrientation(R, orientation)
-                val azimuth = orientation[0] // orientation contains: azimut, pitch and roll
-                val degrees = azimuthToDegrees(azimuth)
-                val direct = headingToString(degrees.toDouble())
-                direction.text = direct
-                if (initialDirection == direct && !isDirectionDetected) {
-                    isDirectionDetected = true
-                    currentStepIndex += 1
-                    notifyStep()
-                }
-            }
-        }
+
     }
 
     fun headingToString(x: Double): String {
@@ -273,8 +264,8 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
 
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest.create()?.apply {
-            interval = 10000
-            fastestInterval = 5000
+            interval = 3000
+            fastestInterval = 2000
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
         mFusedLocationProviderClient.requestLocationUpdates(locationRequest,
@@ -309,27 +300,50 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
             tv_meters.text = "$distanceApart m from destination"
             Log.d("TAG", location.toString())
             //upload to server
+            if (distanceApart < 300) {
+                alertUser()
+            }
             if (distanceApart < 20) {
-                currentStepIndex += 1
-                if (currentStepIndex == overallBigSteps[currentBigStepIndex].steps?.size) {
-                    currentBigStepIndex += 1
+                currentBigStepIndex += 1
+                timeCalled = 0
+                if (checkIsDone()) {
+                    return
                 }
-                alertUser(true)
+                transitDirection()
+                speakDirection()
                 notifyStep()
             }
         }
     }
 
+    private fun checkIsDone(): Boolean {
+        if (currentBigStepIndex == overallBigSteps.size) {
+            tts.stop()
+            tts.speak("You have arrived!", TextToSpeech.QUEUE_ADD, null, null)
+            tv_current_direction.text = "You have arrived! 😎"
+            hasArrived = true
+            return true
+        }
+        return false
+    }
 
-    var timeCalled = 0
-    val timeToCall = 3
 
-    private fun alertUser(reset: Boolean) {
-        if (reset) {
+    private var timeCalled = 0
+    private val timeToCall = 2
+
+    private fun alertUser() {
+        if (hasArrived){
+            return
+        }
+        if (currentBigStepIndex != overallBigSteps.size) {
             timeCalled = 0
         }
-        val vibrateAndSpeak: ()->Unit = {
-            timeCalled+=1
+        timeCalled += 1
+        if (timeToCall == timeCalled){
+            return
+        }
+        Handler().postDelayed({
+
             val v = getSystemService(context!!, Vibrator::class.java)
             // Vibrate for 500 milliseconds
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -339,17 +353,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
                 v?.vibrate(500)
             }
             tts.speak("Get ready to get off, you are near", TextToSpeech.QUEUE_ADD, null, null)
-            alertUser(false)
-        }
-        val handler = Handler()
-
-        handler.postDelayed({
-            if (timeCalled == timeToCall){
-                vibrateAndSpeak()
-            }
-        }, 8000)
-
+            alertUser()
+        }, 1000)
     }
-
-
 }// Required empty public constructor
