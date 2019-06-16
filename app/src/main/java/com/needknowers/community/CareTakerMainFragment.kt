@@ -1,6 +1,7 @@
 package com.needknowers.community
 
 import android.content.Context
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -23,11 +24,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.android.synthetic.main.fragment_care_taker_main.view.*
 
 
 class CareTakerMainFragment : Fragment(), OnMapReadyCallback {
 
+    private lateinit var db: FirebaseFirestore
     var mMap: GoogleMap? = null
     var needKnowerPin: Marker? = null
     var database = FirebaseDatabase.getInstance()
@@ -39,6 +44,7 @@ class CareTakerMainFragment : Fragment(), OnMapReadyCallback {
 
     private var mListener: OnFragmentInteractionListener? = null
 
+
     // Include the OnCreate() method here too, as described above.
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -46,18 +52,38 @@ class CareTakerMainFragment : Fragment(), OnMapReadyCallback {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore, 13f))
         needKnowerPin = mMap?.addMarker(
                 MarkerOptions()
+                        .visible(true)
                         .position(dawson_pos)
-                        .title("Dawson")
+                        .title(args.needKnower.name)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
-//        val destinationPin = mMap?.addMarker(
-//                MarkerOptions()
-//                        .title("Destination")
-//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
-//        val startingPin = mMap?.addMarker(
-//                MarkerOptions()
-//                        .title("Starting Location")
-//                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+//
+        needKnowerPin?.showInfoWindow()
+        db.collection("NeedKnowers")
+                .document(args.needKnower.id)
+                .addSnapshotListener { documentSnapshot: DocumentSnapshot?, _: FirebaseFirestoreException? ->
+                    val start: Map<String, Double> = documentSnapshot?.get("start") as Map<String, Double>?
+                            ?: mapOf()
+                    val end: Map<String, Double> = documentSnapshot?.get("end") as Map<String, Double>?
+                            ?: mapOf()
 
+                    if (start.containsKey("lat") && start.containsKey("long")) {
+
+                        val destinationPin = mMap?.addMarker(
+                                MarkerOptions()
+                                        .position(LatLng(start["lat"]!!, start["long"]!!))
+                                        .title("Destination")
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)))
+                    }
+                    if (end.containsKey("lat") && end.containsKey("long")) {
+                        val startingPin = mMap?.addMarker(
+                                MarkerOptions()
+                                        .position(LatLng(end["lat"]!!, end["long"]!!))
+                                        .title("Starting Location")
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+                    }
+                    val directionListMap = documentSnapshot?.get("direction") as List<Map<String, Double>>
+                    setPolyline(directionListMap)
+                }
         myRef.child(args.needKnower.id).addValueEventListener(object : ValueEventListener {
 
             override fun onCancelled(p0: DatabaseError) {
@@ -80,10 +106,21 @@ class CareTakerMainFragment : Fragment(), OnMapReadyCallback {
         })
     }
 
+    fun setPolyline(directionListMap: List<Map<String, Double>>) {
+        val latLngList: ArrayList<LatLng> = arrayListOf()
+        directionListMap.forEach {
+            latLngList.add(LatLng(it["startLat"]!!, it["startLong"]!!))
+            latLngList.add(LatLng(it["endLat"]!!, it["endLong"]!!))
+        }
+        val line = mMap?.addPolyline(PolylineOptions()
+                .addAll(latLngList)
+                .width(5F)
+                .color(Color.RED))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        db = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -101,7 +138,7 @@ class CareTakerMainFragment : Fragment(), OnMapReadyCallback {
             title = "${args.needKnower.name} Location"
         }
         view.focus_button.setOnClickListener {
-            if (currentLatLng != null){
+            if (currentLatLng != null) {
                 mMap?.animateCamera(CameraUpdateFactory.newLatLng(currentLatLng))
             }
 

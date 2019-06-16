@@ -21,15 +21,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_need_knower_list.view.*
 
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.android.gms.tasks.Task
-import androidx.annotation.NonNull
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.libraries.places.internal.db
-
-
-
 
 data class NeedKnower(val id: String, val name: String, val imageUrl: String) : Parcelable {
     constructor(parcel: Parcel) : this(

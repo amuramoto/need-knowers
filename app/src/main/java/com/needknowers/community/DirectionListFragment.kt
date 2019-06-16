@@ -29,7 +29,9 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.needknowers.community.model.AppDirection
+import com.needknowers.community.model.AppRoute
 import com.needknowers.community.model.AppStep
 import com.needknowers.community.model.AppStop
 import kotlinx.android.synthetic.main.fragment_direction_list.*
@@ -64,6 +66,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         }
     }
 
+    private lateinit var db: FirebaseFirestore
     private val MY_ID: String = "1"
     var database = FirebaseDatabase.getInstance()
     var myRef = database.getReference("needKnowers")
@@ -120,7 +123,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
                 Log.d("DIRECTION", response.body().toString())
                 val appDirection = response.body()
                 if (appDirection != null) {
-                    loadDirections(appDirection.routes[0].legs[0].steps)
+                    loadDirections(appDirection.routes[0], appDirection.routes[0].legs[0].steps)
                     transitDirection()
                     speakDirection()
                     notifyStep()
@@ -132,6 +135,8 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = FirebaseFirestore.getInstance()
+
         tts = TextToSpeech(context!!, this)
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity!!)
         places = Places.createClient(context!!)
@@ -165,15 +170,49 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         return view
     }
 
-    fun loadDirections(steps: ArrayList<AppStep>) {
+    fun loadDirections(route: AppRoute, steps: ArrayList<AppStep>) {
+        var previousLat: Double = 0.0
+        var previousLong: Double = 0.0
         steps.forEach { bigStep ->
             overallBigSteps.add(bigStep)
             if (bigStep.steps != null) {
                 overallSteps.addAll(bigStep.steps)
+            } else {
+                overallSteps.add(bigStep)
             }
         }
-        Log.d("DIRECTION", overallSteps.toString())
+        val directionList = arrayListOf<Map<String, Double>>()
+        overallSteps.forEach {
+            val directionMap = mutableMapOf<String, Double>()
 
+            if (previousLat == 0.0 && previousLong == 0.0) {
+                directionMap["startLat"] = it.startLocation.lat
+                directionMap["startLong"] = it.startLocation.long
+                directionMap["endLat"] = it.endLocation.lat
+                directionMap["endLong"] = it.endLocation.long
+                previousLat = it.endLocation.lat
+                previousLong = it.endLocation.long
+            } else {
+                directionMap["startLat"] = previousLat
+                directionMap["startLong"] = previousLong
+
+                directionMap["endLat"] = it.endLocation.lat
+                directionMap["endLong"] = it.endLocation.long
+                previousLat = it.endLocation.lat
+                previousLong = it.endLocation.long
+            }
+            directionList.add(directionMap)
+        }
+        Log.d("DIRECTION", overallSteps.toString())
+        db.collection("NeedKnowers")
+                .document("shPs1UPK0LZRI1YnGCnd")
+                .update(mapOf("start" to mapOf(
+                        "lat" to route.legs[0].startLocation.lat,
+                        "long" to route.legs[0].startLocation.long
+                ), "end" to mapOf(
+                        "lat" to route.legs[0].endLocation.lat,
+                        "long" to route.legs[0].endLocation.long
+                ), "direction" to directionList))
     }
 
     fun speakNearby() {

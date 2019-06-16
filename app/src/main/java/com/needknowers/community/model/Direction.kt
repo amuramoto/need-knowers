@@ -6,7 +6,9 @@ data class AppDirection(@SerializedName("routes") val routes: ArrayList<AppRoute
 
 data class AppRoute(@SerializedName("legs") val legs: ArrayList<AppLeg>)
 
-data class AppLeg(@SerializedName("steps") val steps: ArrayList<AppStep>)
+data class AppLeg(@SerializedName("steps") val steps: ArrayList<AppStep>,
+                  @SerializedName("end_location") val endLocation: AppLocation,
+                  @SerializedName("start_location") val startLocation: AppLocation)
 
 data class AppStep(@SerializedName("distance") val distance: AppDistance,
                    @SerializedName("duration") val duration: AppDuration,
