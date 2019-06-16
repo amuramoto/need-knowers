@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
         val btnCareTaker = view.findViewById<Button>(R.id.btn_careTaker)
         btnCareTaker.setOnClickListener {
             nextScreenCallback = {
-                findNavController().navigate(R.id.action_loginFragment_to_careTakerMainFragment)
+                findNavController().navigate(R.id.action_loginFragment_to_needKnowerSelectionListFragment)
             }
             getLocationPermission()
         }

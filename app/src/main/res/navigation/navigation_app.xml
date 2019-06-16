@@ -11,11 +11,11 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_careTakerMainFragment"
-            app:destination="@id/careTakerMainFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_needKnowerMainFragment"
             app:destination="@id/needKnowerMainFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_needKnowerSelectionListFragment"
+            app:destination="@id/needKnowerSelectionListFragment" />
     </fragment>
     <fragment
         android:id="@+id/directionListFragment"
@@ -36,7 +36,11 @@
         android:id="@+id/careTakerMainFragment"
         android:name="com.needknowers.community.CareTakerMainFragment"
         android:label="fragment_care_taker_main"
-        tools:layout="@layout/fragment_care_taker_main" />
+        tools:layout="@layout/fragment_care_taker_main" >
+        <argument
+            android:name="needKnower"
+            app:argType="com.needknowers.community.NeedKnower" />
+    </fragment>
     <fragment
         android:id="@+id/searchLocationFragment"
         android:name="com.needknowers.community.SearchLocationFragment"
@@ -63,5 +67,13 @@
         android:name="com.needknowers.community.WhereAmIFragment"
         android:label="fragment_where_am_i"
         tools:layout="@layout/fragment_where_am_i" />
-    <fragment android:id="@+id/placeholder" />
+    <fragment
+        android:id="@+id/needKnowerSelectionListFragment"
+        android:name="com.needknowers.community.NeedKnowerSelectionListFragment"
+        android:label="fragment_need_knower_list"
+        tools:layout="@layout/fragment_need_knower_list" >
+        <action
+            android:id="@+id/action_needKnowerSelectionListFragment_to_careTakerMainFragment"
+            app:destination="@id/careTakerMainFragment" />
+    </fragment>
 </navigation>
