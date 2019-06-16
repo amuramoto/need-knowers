@@ -48,7 +48,7 @@ class CareTakerMainFragment : Fragment(), OnMapReadyCallback {
                 MarkerOptions()
                         .position(dawson_pos)
                         .title("Dawson")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)))
 //        val destinationPin = mMap?.addMarker(
 //                MarkerOptions()
 //                        .title("Destination")

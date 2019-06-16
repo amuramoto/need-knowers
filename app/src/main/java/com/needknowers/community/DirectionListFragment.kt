@@ -190,7 +190,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         } else if (currentBigStepIndex < overallBigSteps.size - 1 && overallBigSteps[currentBigStepIndex + 1].travelMode == "TRANSIT") {
             tts.speak("Go take the " + overallBigSteps[currentBigStepIndex + 1].htmlInstructions, TextToSpeech.QUEUE_ADD, null, null)
         }
-        if (currentBigStepIndex == overallBigSteps.size - 1){
+        if (currentBigStepIndex == overallBigSteps.size - 1) {
             tts.speak("You are almost there. Walk to ${args.placeName}", TextToSpeech.QUEUE_ADD, null, null)
         }
     }
@@ -307,8 +307,8 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
             currentLongitude = location.longitude
             currentLatitude = location.latitude
             myRef.child(MY_ID).apply {
-                setValue("lat", currentLatitude.toString())
-                setValue("long", currentLongitude.toString())
+                child("lat").setValue(currentLatitude.toString())
+                child("long").setValue(currentLongitude.toString())
             }
 
             distanceApart = round(distInMeters(currentLatitude.toFloat(),
@@ -351,11 +351,11 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
     private val timeToCall = 1
 
     private fun alertUser() {
-        if (hasArrived){
+        if (hasArrived) {
             return
         }
 
-        if (timeToCall <= timeCalled){
+        if (timeToCall <= timeCalled) {
             return
         }
         timeCalled += 1

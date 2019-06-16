@@ -3,6 +3,7 @@ package com.needknowers.community
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_need_knower_list.view.*
+
+import com.google.firebase.firestore.QueryDocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.android.gms.tasks.Task
+import androidx.annotation.NonNull
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.libraries.places.internal.db
+
+
 
 
 data class NeedKnower(val id: String, val name: String, val imageUrl: String) : Parcelable {
@@ -50,11 +61,18 @@ data class NeedKnower(val id: String, val name: String, val imageUrl: String) : 
 
 class NeedKnowerSelectionListFragment : Fragment() {
 
-    lateinit var recyclerView: RecyclerView
+    private lateinit var db: FirebaseFirestore
 
+    lateinit var recyclerView: RecyclerView
+    val pandaImage = "https://zoo.sandiegozoo.org/sites/default/files/styles/hero_mobile_560x670/public/2019-01/hero-short-pandacam_0.jpg?itok=Qdw5BiFz"
     val needKnowerList: ArrayList<NeedKnower> = arrayListOf(
-            NeedKnower("1", "Dawson", "https://zoo.sandiegozoo.org/sites/default/files/styles/hero_mobile_560x670/public/2019-01/hero-short-pandacam_0.jpg?itok=Qdw5BiFz")
+            //NeedKnower("1", "Dawson", "https://zoo.sandiegozoo.org/sites/default/files/styles/hero_mobile_560x670/public/2019-01/hero-short-pandacam_0.jpg?itok=Qdw5BiFz")
     )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        db = FirebaseFirestore.getInstance()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_need_knower_list, container, false)
@@ -83,6 +101,20 @@ class NeedKnowerSelectionListFragment : Fragment() {
                 findNavController().navigate(action)
             }
         }
+        db.collection("NeedKnowers")
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            Log.d("TAG", document.id + " => " + document.data)
+                            needKnowerList.add(NeedKnower(document.id, document.data["name"] as String, document.data["imageUrl"] as String))
+                            adapter.notifyDataSetChanged()
+                        }
+
+                    } else {/**/
+                        // Log.w(TAG, "Error getting documents.", task.exception)
+                    }
+                }
     }
 }
 
