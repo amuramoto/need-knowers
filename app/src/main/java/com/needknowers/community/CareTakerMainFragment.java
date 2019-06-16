@@ -36,6 +36,9 @@ public class CareTakerMainFragment extends Fragment
     Marker m4;
     Marker m5;
 
+    private static final int DEFAULT_ZOOM = 15;
+
+
 
     private static final LatLng dawson_pos = new LatLng(1.351, 103.82);
     private static final LatLng kenneth_pos = new LatLng(1.353, 103.82);
@@ -51,7 +54,7 @@ public class CareTakerMainFragment extends Fragment
         mMap = googleMap;
 
         LatLng singapore = new LatLng(1.352, 103.82);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore, 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore, DEFAULT_ZOOM));
 
         m1 = mMap.addMarker(new MarkerOptions()
                 .position(dawson_pos)
@@ -124,8 +127,6 @@ public class CareTakerMainFragment extends Fragment
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
-
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
