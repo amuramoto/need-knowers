@@ -300,11 +300,12 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
             tv_meters.text = "$distanceApart m from destination"
             Log.d("TAG", location.toString())
             //upload to server
-            if (distanceApart < 100) {
-                alertUser(true)
+            if (distanceApart < 300) {
+                alertUser()
             }
             if (distanceApart < 20) {
                 currentBigStepIndex += 1
+                timeCalled = 0
                 if (checkIsDone()) {
                     return
                 }
@@ -330,11 +331,11 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
     private var timeCalled = 0
     private val timeToCall = 2
 
-    private fun alertUser(reset: Boolean) {
+    private fun alertUser() {
         if (hasArrived){
             return
         }
-        if (reset && currentBigStepIndex != overallBigSteps.size) {
+        if (currentBigStepIndex != overallBigSteps.size) {
             timeCalled = 0
         }
         timeCalled += 1
@@ -352,7 +353,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
                 v?.vibrate(500)
             }
             tts.speak("Get ready to get off, you are near", TextToSpeech.QUEUE_ADD, null, null)
-            alertUser(false)
+            alertUser()
         }, 1000)
     }
 }// Required empty public constructor
