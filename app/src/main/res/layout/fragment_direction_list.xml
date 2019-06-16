@@ -97,11 +97,11 @@
         android:id="@+id/call_home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="32dp"
         android:src="@drawable/ic_local_phone_black_24dp"
         android:tint="@color/quantum_white_100"
-        android:layout_margin="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/d_streetView" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -9,20 +9,21 @@
     android:orientation="vertical"
     >
 
-    <TextView
-        android:id="@+id/direction_toolbar"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/whereami_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/where_am_i"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/streetviewpanorama" />
+        app:layout_constraintBottom_toTopOf="@id/streetviewpanorama"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.gms.maps.StreetViewPanoramaView
         android:id="@+id/streetviewpanorama"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        app:layout_constraintTop_toBottomOf="@id/direction_toolbar"
+        app:layout_constraintTop_toBottomOf="@id/whereami_toolbar"
         app:layout_constraintBottom_toTopOf="@id/card"
         />
 
@@ -49,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:textAlignment="center"
                 tools:text="Google Singapore" />
 
             <TextView
@@ -57,6 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:textAlignment="center"
                 tools:text="402, Blk X, Tiong Bahru, Singapore" />
 
         </LinearLayout>

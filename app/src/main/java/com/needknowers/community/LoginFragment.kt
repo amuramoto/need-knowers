@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -27,7 +28,7 @@ class LoginFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
         // Setup the button click
-        val btnCareTaker = view.findViewById<Button>(R.id.btn_careTaker)
+        val btnCareTaker = view.findViewById<CardView>(R.id.btn_careTaker)
         btnCareTaker.setOnClickListener {
             nextScreenCallback = {
                 findNavController().navigate(R.id.action_loginFragment_to_needKnowerSelectionListFragment)
@@ -35,7 +36,7 @@ class LoginFragment : Fragment() {
             getLocationPermission()
         }
 
-        val btnNeedKnower = view.findViewById<Button>(R.id.btn_needKnower)
+        val btnNeedKnower = view.findViewById<CardView>(R.id.btn_needKnower)
         btnNeedKnower.setOnClickListener {
             nextScreenCallback = {
                 findNavController().navigate(R.id.action_loginFragment_to_needKnowerMainFragment)

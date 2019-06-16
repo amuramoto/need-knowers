@@ -1,9 +1,11 @@
 package com.needknowers.community
 
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.net.Uri
 import android.os.*
 import android.speech.tts.TextToSpeech
 import android.text.Html
@@ -35,6 +37,7 @@ import com.needknowers.community.model.AppRoute
 import com.needknowers.community.model.AppStep
 import com.needknowers.community.model.AppStop
 import kotlinx.android.synthetic.main.fragment_direction_list.*
+import kotlinx.android.synthetic.main.fragment_direction_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -150,6 +153,11 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         makeNetworkCall()
     }
 
+    fun callHelp() {
+        val intent = Intent(Intent.ACTION_CALL);
+        intent.data = Uri.parse("tel:0987654321");
+        startActivity(intent)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -160,7 +168,9 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         streetViewPanoramaView = view.findViewById(R.id.d_streetView)
         streetViewPanoramaView?.onCreate(savedInstanceState)
         streetViewPanoramaView?.getStreetViewPanoramaAsync(this)
-
+        view.call_home.setOnClickListener {
+            callHelp()
+        }
         view.findViewById<Toolbar>(R.id.direction_toolbar).apply {
             val navController = findNavController()
             val appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -173,6 +183,9 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
     fun loadDirections(route: AppRoute, steps: ArrayList<AppStep>) {
         var previousLat: Double = 0.0
         var previousLong: Double = 0.0
+        db.collection("NeedKnowers")
+                .document("shPs1UPK0LZRI1YnGCnd")
+                .update(mapOf("direction" to mapOf<String, Double>()))
         steps.forEach { bigStep ->
             overallBigSteps.add(bigStep)
             if (bigStep.steps != null) {

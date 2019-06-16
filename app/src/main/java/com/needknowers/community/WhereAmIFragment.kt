@@ -8,7 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback
@@ -20,8 +24,6 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import kotlinx.android.synthetic.main.fragment_where_am_i.view.*
-import java.util.*
-import java.util.Arrays.asList
 
 class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
 
@@ -81,6 +83,12 @@ class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
 
         view.call_home.setOnClickListener {
             callHelp()
+        }
+        view.findViewById<Toolbar>(R.id.whereami_toolbar).apply {
+            val navController = findNavController()
+            val appBarConfiguration = AppBarConfiguration(navController.graph)
+            setupWithNavController(navController, appBarConfiguration)
+            title = "WHERE AM I"
         }
 
         val placeResponse = places.findCurrentPlace(request)

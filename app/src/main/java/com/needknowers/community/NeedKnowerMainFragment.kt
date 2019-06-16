@@ -5,8 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.*
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.internal.it
@@ -49,14 +53,12 @@ class NeedKnowerMainFragment : Fragment() {
         view.btn_getDirection.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_needKnowerMainFragment_to_searchLocationFragment))
         view.btn_whereAmI.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_needKnowerMainFragment_to_whereAmIFragment2))
 
-//        // Construct a GeoDataClient.
-//        mGeoDataClient = Places.getGeoDataClient(this, null);
-//
-//        // Construct a PlaceDetectionClient.
-//        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
-//
-//        // Construct a FusedLocationProviderClient.
-//        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        view.findViewById<Toolbar>(R.id.nk_toolbar).apply {
+            val navController = findNavController()
+            val appBarConfiguration = AppBarConfiguration(navController.graph)
+            setupWithNavController(navController, appBarConfiguration)
+            title = "What to do?"
+        }
         return view
     }
 

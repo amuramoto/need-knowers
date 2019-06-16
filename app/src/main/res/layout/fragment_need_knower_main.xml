@@ -7,8 +7,14 @@
     tools:context=".NeedKnowerMainFragment">
 
     <androidx.appcompat.widget.Toolbar
+        android:id="@+id/nk_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"/>
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        android:layout_height="?android:attr/actionBarSize"
+
+        />
 
     <androidx.cardview.widget.CardView
         android:layout_marginStart="16dp"
@@ -26,8 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@color/quantum_black_100"
-            tools:srcCompat="@tools:sample/backgrounds/scenic[19]"
+            android:src="@drawable/bus"
             android:contentDescription="@string/where_am_i" />
         <View
             android:layout_width="match_parent"
@@ -60,8 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@color/quantum_black_100"
-            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            android:src="@drawable/merlion"
             android:contentDescription="@string/directions" />
         <View
             android:layout_width="match_parent"
@@ -72,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+
             style="@style/TextAppearance.AppCompat.Large.Inverse"
             android:text="@string/directions"
             />
