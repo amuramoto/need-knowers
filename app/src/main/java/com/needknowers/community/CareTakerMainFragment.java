@@ -1,6 +1,7 @@
 package com.needknowers.community;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,14 +28,59 @@ public class CareTakerMainFragment extends Fragment
         implements OnMapReadyCallback {
 
     GoogleMap mMap;
+    Marker m1;
+    Marker m2;
+    Marker m3;
+    Marker m4;
+    Marker m5;
+
+
+    private static final LatLng dawson_pos = new LatLng(1.351, 103.82);
+    private static final LatLng kenneth_pos = new LatLng(1.353, 103.82);
+    private static final LatLng natalie_pos = new LatLng(1.354, 103.82);
+    private static final LatLng wei_pos = new LatLng(1.355, 103.82);
+    private static final LatLng john_pos = new LatLng(1.356, 103.82);
+
+
 
     // Include the OnCreate() method here too, as described above.
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
-
         mMap = googleMap;
+
+        LatLng singapore = new LatLng(1.352, 103.82);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(singapore));
+
+        m1 = mMap.addMarker(new MarkerOptions()
+                .position(dawson_pos)
+                .title("Dawson"));
+        m1.setTag(0);
+        m1.setVisible(false);
+
+        m2 = mMap.addMarker(new MarkerOptions()
+                .position(kenneth_pos)
+                .title("Kenneth"));
+        m2.setTag(0);
+        m2.setVisible(false);
+
+        m3 = mMap.addMarker(new MarkerOptions()
+                .position(natalie_pos)
+                .title("Natasha"));
+        m3.setTag(0);
+        m3.setVisible(false);
+
+        m4 = mMap.addMarker(new MarkerOptions()
+                .position(wei_pos)
+                .title("Wei Wang"));
+        m4.setTag(0);
+        m4.setVisible(false);
+
+        m5 = mMap.addMarker(new MarkerOptions()
+                .position(john_pos)
+                .title("John"));
+        m5.setTag(0);
+        m5.setVisible(false);
+
     }
 
     private OnFragmentInteractionListener mListener;
@@ -60,7 +107,7 @@ public class CareTakerMainFragment extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_care_taker_main, container, false);
         // Inflate the layout for this fragment
-        Spinner spinner = (Spinner) view.findViewById(R.id.ct_spinner);
+        final Spinner spinner = (Spinner) view.findViewById(R.id.ct_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.persons_array, android.R.layout.simple_spinner_item);
@@ -68,17 +115,48 @@ public class CareTakerMainFragment extends Fragment
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-        final String need_knower = spinner.getSelectedItem().toString();
 
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                LatLng singapore = new LatLng(1.352, 103.82);
-                mMap.addMarker(new MarkerOptions().position(singapore)
-                        .title(need_knower));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(singapore));
+                if (spinner.getSelectedItemId() == 0){
+                    m1.setVisible(true);
+                    m2.setVisible(false);
+                    m3.setVisible(false);
+                    m4.setVisible(false);
+                    m5.setVisible(false);
+                }
+                if (spinner.getSelectedItemId() == 1){
+                    m1.setVisible(false);
+                    m2.setVisible(true);
+                    m3.setVisible(false);
+                    m4.setVisible(false);
+                    m5.setVisible(false);
+                }
+                if (spinner.getSelectedItemId() == 2){
+                    m1.setVisible(false);
+                    m2.setVisible(false);
+                    m3.setVisible(true);
+                    m4.setVisible(false);
+                    m5.setVisible(false);
+                }
+                if (spinner.getSelectedItemId() == 3){
+                    m1.setVisible(false);
+                    m2.setVisible(false);
+                    m3.setVisible(false);
+                    m4.setVisible(true);
+                    m5.setVisible(false);
+                }
+                if (spinner.getSelectedItemId() == 4){
+                    m1.setVisible(false);
+                    m2.setVisible(false);
+                    m3.setVisible(false);
+                    m4.setVisible(false);
+                    m5.setVisible(true);
+                }
+
             }
 
             @Override
