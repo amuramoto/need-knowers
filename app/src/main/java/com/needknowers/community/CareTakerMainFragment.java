@@ -19,6 +19,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.GoogleMap;
 
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -49,35 +51,42 @@ public class CareTakerMainFragment extends Fragment
         mMap = googleMap;
 
         LatLng singapore = new LatLng(1.352, 103.82);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(singapore));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(singapore, 15));
 
         m1 = mMap.addMarker(new MarkerOptions()
                 .position(dawson_pos)
-                .title("Dawson"));
+                .title("Dawson")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         m1.setTag(0);
         m1.setVisible(false);
 
         m2 = mMap.addMarker(new MarkerOptions()
                 .position(kenneth_pos)
-                .title("Kenneth"));
+                .title("Kenneth")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         m2.setTag(0);
+
         m2.setVisible(false);
 
         m3 = mMap.addMarker(new MarkerOptions()
                 .position(natalie_pos)
-                .title("Natasha"));
+                .title("Natasha")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
         m3.setTag(0);
         m3.setVisible(false);
 
         m4 = mMap.addMarker(new MarkerOptions()
                 .position(wei_pos)
-                .title("Wei Wang"));
+                .title("Wei Wang")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
         m4.setTag(0);
         m4.setVisible(false);
 
         m5 = mMap.addMarker(new MarkerOptions()
                 .position(john_pos)
-                .title("John"));
+                .title("John")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
         m5.setTag(0);
         m5.setVisible(false);
 
@@ -123,6 +132,7 @@ public class CareTakerMainFragment extends Fragment
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (spinner.getSelectedItemId() == 0){
                     m1.setVisible(true);
+                    m1.showInfoWindow();
                     m2.setVisible(false);
                     m3.setVisible(false);
                     m4.setVisible(false);
@@ -131,6 +141,8 @@ public class CareTakerMainFragment extends Fragment
                 if (spinner.getSelectedItemId() == 1){
                     m1.setVisible(false);
                     m2.setVisible(true);
+                    m2.showInfoWindow();
+
                     m3.setVisible(false);
                     m4.setVisible(false);
                     m5.setVisible(false);
@@ -139,6 +151,8 @@ public class CareTakerMainFragment extends Fragment
                     m1.setVisible(false);
                     m2.setVisible(false);
                     m3.setVisible(true);
+                    m3.showInfoWindow();
+
                     m4.setVisible(false);
                     m5.setVisible(false);
                 }
@@ -147,6 +161,8 @@ public class CareTakerMainFragment extends Fragment
                     m2.setVisible(false);
                     m3.setVisible(false);
                     m4.setVisible(true);
+                    m4.showInfoWindow();
+
                     m5.setVisible(false);
                 }
                 if (spinner.getSelectedItemId() == 4){
@@ -155,6 +171,8 @@ public class CareTakerMainFragment extends Fragment
                     m3.setVisible(false);
                     m4.setVisible(false);
                     m5.setVisible(true);
+                    m5.showInfoWindow();
+
                 }
 
             }
