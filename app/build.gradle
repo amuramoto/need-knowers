@@ -4,6 +4,11 @@ apply plugin: 'kotlin-android'
 //Apply Safe Args Plugin
 apply plugin: 'androidx.navigation.safeargs'
 
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.0'
@@ -16,9 +21,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+
         release {
+
+            resValue "string", "MAP_API_KEY", properties.getProperty("MAP_API_KEY")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            resValue "string", "MAP_API_KEY", properties.getProperty("MAP_API_KEY")
         }
     }
 }
@@ -39,6 +50,9 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
     implementation "androidx.core:core-ktx:1.0.2"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
 }
 repositories {
     mavenCentral()

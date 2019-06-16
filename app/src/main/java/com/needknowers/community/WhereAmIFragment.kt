@@ -47,15 +47,7 @@ class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity!!)
         places = Places.createClient(context!!)
         requestLastLocation()
-        val placeResponse = places.findCurrentPlace(request)
-        placeResponse.addOnCompleteListener {
-            Log.d(TAG, it.result?.placeLikelihoods.toString())
-            it.result?.placeLikelihoods?.first { likelihood ->
-                tvName.text = likelihood.place.name
-                tvAddress.text = likelihood.place.address
-                true
-            }
-        }
+
     }
 
     fun callHelp() {
@@ -89,6 +81,16 @@ class WhereAmIFragment : Fragment(), OnStreetViewPanoramaReadyCallback {
 
         view.call_home.setOnClickListener {
             callHelp()
+        }
+
+        val placeResponse = places.findCurrentPlace(request)
+        placeResponse.addOnCompleteListener {
+            Log.d(TAG, it.result?.placeLikelihoods.toString())
+            it.result?.placeLikelihoods?.first { likelihood ->
+                tvName.text = likelihood.place.name
+                tvAddress.text = likelihood.place.address
+                true
+            }
         }
 
         return view

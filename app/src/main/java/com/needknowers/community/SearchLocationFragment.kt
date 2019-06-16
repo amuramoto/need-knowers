@@ -71,9 +71,9 @@ class SearchLocationFragment : Fragment() {
 
         view.btn_go.setOnClickListener {
             if (destinationLatLng != null && currentLatLng != null){
-                SearchLocationFragmentDirections.actionSearchLocationFragmentToDirectionListFragment(destinationLatLng!!,
+                val action = SearchLocationFragmentDirections.actionSearchLocationFragmentToDirectionListFragment(destinationLatLng!!,
                         placeName!!, currentLatLng!!)
-                findNavController().navigate(R.id.action_searchLocationFragment_to_directionListFragment)
+                findNavController().navigate(action)
             } else {
                 throw Exception("No LatLng")
             }
