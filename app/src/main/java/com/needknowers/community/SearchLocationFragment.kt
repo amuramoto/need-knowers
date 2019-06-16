@@ -1,12 +1,16 @@
 package com.needknowers.community
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -16,6 +20,16 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import kotlinx.android.synthetic.main.fragment_search_location.view.*
+import android.widget.EditText
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import android.graphics.drawable.Drawable
+
+
+
+
+
+
 
 class SearchLocationFragment : Fragment() {
 
@@ -68,7 +82,6 @@ class SearchLocationFragment : Fragment() {
 
             }
         })
-
         view.btn_go.setOnClickListener {
             if (destinationLatLng != null && currentLatLng != null){
                 val action = SearchLocationFragmentDirections.actionSearchLocationFragmentToDirectionListFragment(destinationLatLng!!,
@@ -77,6 +90,12 @@ class SearchLocationFragment : Fragment() {
             } else {
                 throw Exception("No LatLng")
             }
+        }
+        view.findViewById<Toolbar>(R.id.search_toolbar).apply {
+            val navController = findNavController()
+            val appBarConfiguration = AppBarConfiguration(navController.graph)
+            setupWithNavController(navController, appBarConfiguration)
+            title = ""
         }
         return view
     }

@@ -12,9 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback
 import com.google.android.gms.maps.StreetViewPanorama
@@ -24,6 +28,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.firebase.database.FirebaseDatabase
 import com.needknowers.community.model.AppDirection
 import com.needknowers.community.model.AppStep
 import com.needknowers.community.model.AppStop
@@ -59,6 +64,9 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         }
     }
 
+    private val MY_ID: String = "1"
+    var database = FirebaseDatabase.getInstance()
+    var myRef = database.getReference("needKnowers")
     private var hasArrived: Boolean = false
     private lateinit var tts: TextToSpeech
     private var isDirectionDetected: Boolean = false
@@ -147,6 +155,13 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
         streetViewPanoramaView = view.findViewById(R.id.d_streetView)
         streetViewPanoramaView?.onCreate(savedInstanceState)
         streetViewPanoramaView?.getStreetViewPanoramaAsync(this)
+
+        view.findViewById<Toolbar>(R.id.direction_toolbar).apply {
+            val navController = findNavController()
+            val appBarConfiguration = AppBarConfiguration(navController.graph)
+            setupWithNavController(navController, appBarConfiguration)
+            title = "Way to ${args.placeName}"
+        }
         return view
     }
 
@@ -291,6 +306,10 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
             val location = locationResult.locations.first()
             currentLongitude = location.longitude
             currentLatitude = location.latitude
+            myRef.child(MY_ID).apply {
+                setValue("lat", currentLatitude.toString())
+                setValue("long", currentLongitude.toString())
+            }
 
             distanceApart = round(distInMeters(currentLatitude.toFloat(),
                     currentLongitude.toFloat(),
@@ -329,19 +348,17 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
 
 
     private var timeCalled = 0
-    private val timeToCall = 2
+    private val timeToCall = 1
 
     private fun alertUser() {
         if (hasArrived){
             return
         }
-        if (currentBigStepIndex != overallBigSteps.size) {
-            timeCalled = 0
-        }
-        timeCalled += 1
-        if (timeToCall == timeCalled){
+
+        if (timeToCall <= timeCalled){
             return
         }
+        timeCalled += 1
         Handler().postDelayed({
 
             val v = getSystemService(context!!, Vibrator::class.java)
@@ -352,7 +369,7 @@ class DirectionListFragment : Fragment(), OnStreetViewPanoramaReadyCallback, Sen
                 //deprecated in API 26
                 v?.vibrate(500)
             }
-            tts.speak("Get ready to get off, you are near", TextToSpeech.QUEUE_ADD, null, null)
+            tts.speak("Get ready, you are near", TextToSpeech.QUEUE_ADD, null, null)
             alertUser()
         }, 1000)
     }
